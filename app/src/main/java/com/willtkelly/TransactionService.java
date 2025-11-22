@@ -68,8 +68,41 @@ public class TransactionService {
             return false;
         }
 
-        account.addTransaction();
+        account.addTransaction(transaction);
         return true;
+    }
+
+    public double getAccountBalance(String accountName) {
+        Account account = getAccount(accountName);
+        if (account == null) {
+            return 0.0;
+        }
+
+        return account.getBalance();
+    }
+
+    public double calculateTotalBalance() {
+        double total = 0;
+
+        for (Account account : this.accounts.values()) {
+            total += account.getBalance();
+        }
+
+        return total;
+    }
+
+    public double getSpendingByCategory(Category category) {
+        double total = 0;
+
+        for (Account account : this.accounts.values()) {
+            for (Transaction transaction : account.getTransactions()) {
+                if (transaction.getCategory() == category) {
+                    total += transaction.getAmount();
+                }
+            }
+        }
+        
+        return total;
     }
 
 }

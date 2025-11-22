@@ -5,10 +5,10 @@ import java.time.LocalDate;
 public class Transaction {
     private double amount;
     private LocalDate date;
-    private String category;
+    private Category category;
     private String description;
 
-    public Transaction(double amount, String category, String description) {
+    public Transaction(double amount, Category category, String description) {
         this.amount = amount;
         this.category = category;
         this.description = description;
@@ -26,9 +26,9 @@ public class Transaction {
         this.date = newDate;
     }
 
-    public String getCategory() { return this.category; }
+    public Category getCategory() { return this.category; }
 
-    public void setCategory(String category) { this.category = category; }
+    public void setCategory(Category category) { this.category = category; }
 
     public String getDescription() { return this.description; }
 
