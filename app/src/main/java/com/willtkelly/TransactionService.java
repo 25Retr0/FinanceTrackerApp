@@ -58,9 +58,9 @@ public class TransactionService {
     /**
      * Adds a new transaction to the specified account.
      *
-     * @param accountName - 
-     * @param transaction -
-     * @return boolean - 
+     * @param accountName - String name of account to add transaction to
+     * @param transaction - Transaction to add to the account
+     * @return boolean - True if successful, otherwise false
      */
     public boolean addTransaction(String accountName, Transaction transaction) {
         Account account = getAccount(accountName);
@@ -72,6 +72,12 @@ public class TransactionService {
         return true;
     }
 
+    /**
+     * Get the total balance of a specific account.
+     *
+     * @param accountName - String name of the account to get balance of
+     * @return double - total value of the account balance
+     */
     public double getAccountBalance(String accountName) {
         Account account = getAccount(accountName);
         if (account == null) {
@@ -81,6 +87,11 @@ public class TransactionService {
         return account.getBalance();
     }
 
+    /**
+     * Get the total balance of all accounts.
+     *
+     * @return double - total balance of all accounts
+     */
     public double calculateTotalBalance() {
         double total = 0;
 
@@ -91,6 +102,12 @@ public class TransactionService {
         return total;
     }
 
+    /**
+     * Get the total spending of a specific category
+     *
+     * @param category - Category to get spending of
+     * @return double - total value of spending in specific Category
+     */
     public double getSpendingByCategory(Category category) {
         double total = 0;
 
