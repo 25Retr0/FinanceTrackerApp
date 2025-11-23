@@ -6,16 +6,21 @@ package com.willtkelly;
 public class App {
 
     public static void main(String[] args) {
+        System.out.print("Initialising Database...");
+        DataManager.initialiseDatabase();
+        System.out.print("Completed.\n");
 
         TransactionService ts = new TransactionService();
         Account a1 = new Account("Savings", 100);
         ts.addAccount(a1);
 
+        Account a2 = new Account("Everyday Spending", 200);
+        ts.addAccount(a2);
+
         Transaction t1 = new Transaction(10, Category.SAVINGS, "Loose change");
         ts.addTransaction("Savings", t1);
 
-        DataManager.initialiseDatabase();
-
-        System.out.println("Finished Testing");
+        FinanceViewCLI ui = new FinanceViewCLI(ts);
+        ui.header();
     }
 }

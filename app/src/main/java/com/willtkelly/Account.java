@@ -49,6 +49,7 @@ public class Account {
 
     public void addTransaction(Transaction transaction) {
         transactions.addFirst(transaction);
+        setBalance(balance + transaction.getAmount());
     }
 
 }
