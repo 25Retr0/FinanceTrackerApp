@@ -15,6 +15,8 @@ public class Transaction {
         this.date = LocalDate.now();
     }
 
+    public Transaction() { }
+
     public double getAmount() { return this.amount; }
 
     public void setAmount(double amount) { this.amount = amount; }

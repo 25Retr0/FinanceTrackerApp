@@ -4,11 +4,18 @@
 package com.willtkelly;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        TransactionService ts = new TransactionService();
+        Account a1 = new Account("Savings", 100);
+        ts.addAccount(a1);
+
+        Transaction t1 = new Transaction(10, Category.SAVINGS, "Loose change");
+        ts.addTransaction("Savings", t1);
+
+        DataManager.initialiseDatabase();
+
+        System.out.println("Finished Testing");
     }
 }

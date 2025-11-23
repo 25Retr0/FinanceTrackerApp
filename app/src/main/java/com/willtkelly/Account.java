@@ -33,6 +33,8 @@ public class Account {
         this.transactions = new ArrayList<>();
     }
 
+    public Account() { }
+
     public String getName() { return this.name; }
 
     public void setName(String name) { this.name = name; }

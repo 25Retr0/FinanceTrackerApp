@@ -13,6 +13,10 @@ public class TransactionService {
         this.accounts = new HashMap<>();
     }
 
+    public TransactionService(HashMap<String, Account> accounts) {
+        this.accounts = accounts;
+    }
+
     /**
      * Adds a new account to the tracker.
      *
@@ -54,6 +58,8 @@ public class TransactionService {
     public List<Account> getAllAccounts() {
         return new ArrayList<>(this.accounts.values());
     }
+
+    
 
     /**
      * Adds a new transaction to the specified account.
