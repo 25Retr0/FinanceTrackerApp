@@ -14,6 +14,7 @@ class FinanceViewCLI {
         System.out.println("------------------------------------");
         System.out.println(" Finance Tracker | Balance: $" + ts.calculateTotalBalance());
         System.out.println("------------------------------------");
+        System.out.println("");
 
         List<Account> accounts = ts.getAllAccounts();
         for (Account account : accounts) {
@@ -25,6 +26,12 @@ class FinanceViewCLI {
         System.out.flush();
     }
 
+    public void commands() {
+        System.out.println("Commands:");
+        System.out.println("  - view account");
+        System.out.println("  - add transaction");
+        System.out.println("  - add account");
+    }
 
     public void clearScreen() {
         System.out.print("\033[H\033[2J");

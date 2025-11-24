@@ -22,5 +22,6 @@ public class App {
 
         FinanceViewCLI ui = new FinanceViewCLI(ts);
         ui.header();
+        ui.commands();
     }
 }
