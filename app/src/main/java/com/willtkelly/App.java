@@ -2,8 +2,9 @@ package com.willtkelly;
 
 import javafx.stage.Stage;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 
 public class App extends Application {
 
@@ -29,12 +30,17 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FinanceViewUI view = new FinanceViewUI();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/view1.fxml"));
+            Scene scene = new Scene(root, 700, 500);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Finance Tracker");
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        Scene scene = new Scene(view.getView(), 600, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Finance App");
-        primaryStage.show();
     }
 
     public static void main(String[] args) {
