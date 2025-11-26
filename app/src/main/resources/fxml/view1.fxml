@@ -34,6 +34,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -44,8 +45,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
   <children>
@@ -55,16 +56,7 @@
             <menus>
               <Menu mnemonicParsing="false" text="File">
                 <items>
-                  <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Open…" />
-                  <Menu mnemonicParsing="false" text="Open Recent" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
                   <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As…" />
-                  <MenuItem mnemonicParsing="false" text="Revert" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences…" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Quit" />
                 </items>
@@ -96,13 +88,13 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.19754464285714285" layoutX="321.0" layoutY="-52.0" prefHeight="42.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.2700892857142857" layoutX="321.0" layoutY="-52.0" prefHeight="42.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
                                     <ButtonBar layoutX="-13.0" layoutY="6.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="174.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <buttons>
-                                        <Button mnemonicParsing="false" text="Button" />
+                                        <Button fx:id="addAccountBtn" mnemonicParsing="false" text="Add Account" />
                                       </buttons>
                                     </ButtonBar>
                                  </children>
@@ -111,7 +103,7 @@
                                  <children>
                                     <ButtonBar layoutX="84.0" prefHeight="40.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <buttons>
-                                        <Button mnemonicParsing="false" text="Button" />
+                                        <Button fx:id="addTransactionBtn" mnemonicParsing="false" text="Add Transaction" />
                                       </buttons>
                                     </ButtonBar>
                                  </children>
@@ -122,20 +114,34 @@
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.19642857142857142" prefHeight="523.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.2700892857142857" prefHeight="523.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="-13.0" prefHeight="521.0" prefWidth="173.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox prefHeight="521.0" prefWidth="239.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label prefHeight="18.0" prefWidth="98.0" text="Total Balance: " />
+                                                <Label prefHeight="18.0" prefWidth="141.0" text="____" />
+                                             </children>
+                                          </HBox>
+                                          <Label prefHeight="18.0" prefWidth="239.0" text="Accounts" />
+                                          <ListView prefHeight="521.0" prefWidth="173.0" />
+                                       </children>
+                                    </VBox>
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <TableView layoutX="6.0" layoutY="8.0" prefHeight="521.0" prefWidth="717.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
+                                    <TableView fx:id="transactionTable" layoutX="6.0" layoutY="8.0" prefHeight="521.0" prefWidth="717.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columns>
+                                          <TableColumn fx:id="idColumn" minWidth="50.0" prefWidth="50.0" text="#" />
+                                          <TableColumn fx:id="amountColumn" minWidth="120.0" prefWidth="120.0" text="Amount" />
+                                          <TableColumn fx:id="categoryColumn" minWidth="120.0" prefWidth="120.0" text="Category" />
+                                          <TableColumn fx:id="dateColumn" minWidth="110.0" prefWidth="110.0" text="Date" />
+                                          <TableColumn fx:id="descriptionColumn" minWidth="260.0" prefWidth="260.0" text="Description" />
+                                       </columns>
                                     </TableView>
                                  </children>
                               </AnchorPane>

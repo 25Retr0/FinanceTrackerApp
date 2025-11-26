@@ -32,7 +32,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/view1.fxml"));
-            Scene scene = new Scene(root, 700, 500);
+            Scene scene = new Scene(root, 900, 600);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Finance Tracker");
             primaryStage.setResizable(false);

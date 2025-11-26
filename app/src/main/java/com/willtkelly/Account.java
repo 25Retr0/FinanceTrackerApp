@@ -21,15 +21,22 @@ public class Account {
         this.transactions = transactions;
     }
 
-    /**
-     *
-     */
+
     public Account(
         String name,
         double balance
     ) {
         this.name = name;
         this.balance = balance;
+        this.transactions = new ArrayList<>();
+    }
+
+    /**
+     *
+     */
+    public Account(String name) {
+        this.name = name;
+        this.balance = 0;
         this.transactions = new ArrayList<>();
     }
 

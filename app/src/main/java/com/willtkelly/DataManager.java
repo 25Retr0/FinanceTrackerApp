@@ -1,9 +1,13 @@
 package com.willtkelly;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -63,5 +67,49 @@ public class DataManager {
             System.err.println("Database initialization failed:");
             System.err.println(e.getMessage());
         }
+    }
+
+    public Account loadAccountWithTransactions(String accountName) {
+        String sql = """
+            SELECT t.id, t.amount, t.category, t.date, t.description 
+            FROM transactions t
+            INNER JOIN accounts a ON t.account_id = a.id
+            WHERE a.name = ?;
+        """;
+
+        Account account = new Account(accountName);
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, accountName);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Transaction t = new Transaction();
+                t.setId(rs.getInt("id"));
+                t.setAmount(rs.getDouble("amount"));
+                t.setCategory(Category.valueOf(rs.getString("category")));
+                t.setDescription(rs.getString("description"));
+                t.setDate(rs.getString("date"));
+
+                account.addTransaction(t);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database query failed:");
+            System.err.println(e.getMessage());
+            return null;
+        }
+
+        return account;
+    }
+
+
+    public ArrayList<Account> loadAllAccounts() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        
+        return accounts;
     }
 }
