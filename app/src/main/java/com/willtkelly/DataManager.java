@@ -1,13 +1,10 @@
 package com.willtkelly;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -69,7 +66,7 @@ public class DataManager {
         }
     }
 
-    public Account loadAccountWithTransactions(String accountName) {
+    public static Account loadAccountWithTransactions(String accountName) {
         String sql = """
             SELECT t.id, t.amount, t.category, t.date, t.description 
             FROM transactions t
@@ -107,9 +104,34 @@ public class DataManager {
     }
 
 
-    public ArrayList<Account> loadAllAccounts() {
+    public static ArrayList<Account> loadAllAccounts() {
+
+        String sqlQuery = "SELECT name FROM accounts;";
+        ArrayList<String> accountNames = new ArrayList<>();
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(sqlQuery)) {
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                accountNames.add(rs.getString("name")); 
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database query failed:");
+            System.err.println(e.getMessage());
+            return null;
+        }
+
+        // Use accountNames and load accounts
         ArrayList<Account> accounts = new ArrayList<>();
-        
+
+        for (String name : accountNames) {
+            Account account = loadAccountWithTransactions(name);
+            accounts.add(account);
+        }
+
         return accounts;
     }
 }

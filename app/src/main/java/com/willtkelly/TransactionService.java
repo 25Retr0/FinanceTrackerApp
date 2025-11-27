@@ -17,6 +17,12 @@ public class TransactionService {
         this.accounts = accounts;
     }
 
+    public TransactionService(ArrayList<Account> accounts) {
+        for (Account account : accounts) {
+            addAccount(account);
+        }
+    }
+
     /**
      * Adds a new account to the tracker.
      *
