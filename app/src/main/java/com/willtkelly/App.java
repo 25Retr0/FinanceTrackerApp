@@ -1,6 +1,9 @@
 package com.willtkelly;
 
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,8 +33,32 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        // Setup Model/Service Envirnoment
+        DataManager.initialiseDatabase();
+        ArrayList<Account> accounts = DataManager.loadAllAccounts();
+        TransactionService ts = new TransactionService(accounts);
+
+        // Setup FXML Loader and apply the factory
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view1.fxml"));
+
+        // Set Controller Factory
+        loader.setControllerFactory(param -> {
+            if (param.equals(FinanceViewUIController.class)) {
+                return new FinanceViewUIController(ts);
+            }
+
+            try {
+                java.lang.reflect.Constructor<?> constructor = param.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                return constructor.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        });
+
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/view1.fxml"));
+            Parent root = loader.load();
             Scene scene = new Scene(root, 900, 600);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Finance Tracker");
