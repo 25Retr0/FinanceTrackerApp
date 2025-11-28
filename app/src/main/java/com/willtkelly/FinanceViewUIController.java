@@ -2,7 +2,10 @@ package com.willtkelly;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -11,7 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class FinanceViewUIController {
 
     private TransactionService ts;
-
 
     @FXML
     private TableView<Transaction> transactionTable;
@@ -33,6 +35,9 @@ public class FinanceViewUIController {
 
     @FXML
     private void initialize() {
+        // Initialize database
+        DataManager.initialiseDatabase();
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -47,11 +52,24 @@ public class FinanceViewUIController {
 
         // Set table data, default to first account name.
 
+        // Get transactions of first account name
+        List<Account> allAccs = ts.getAllAccounts();
+        System.out.println(allAccs);
+        if (allAccs.size() == 0) {
+            System.err.println("No Accounts Available...");
+            return;
+        }
 
+        Account acc = allAccs.getFirst();
+        List<Transaction> trans = acc.getTransactions();
+        System.out.println(trans);
+
+        ObservableList<Transaction> shownTransactions = FXCollections.observableArrayList(trans);
+        System.out.println(shownTransactions);
+        transactionTable.setItems(shownTransactions);
 
 
         // TODO: FXML: Show accounts as cards on sidebar
-
 
         System.out.println("Application ready.");
     }

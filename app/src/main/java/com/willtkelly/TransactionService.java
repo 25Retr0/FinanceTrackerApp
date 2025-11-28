@@ -17,8 +17,13 @@ public class TransactionService {
         this.accounts = accounts;
     }
 
-    public TransactionService(ArrayList<Account> accounts) {
-        for (Account account : accounts) {
+    public TransactionService(ArrayList<Account> accountsList) {
+        this.accounts = new HashMap<>();
+        if (accountsList == null) {
+            return;
+        }
+
+        for (Account account : accountsList) {
             addAccount(account);
         }
     }
@@ -62,6 +67,10 @@ public class TransactionService {
      * @return List of accounts
      */
     public List<Account> getAllAccounts() {
+        if (this.accounts == null) {
+            return new ArrayList<>();
+        }
+
         return new ArrayList<>(this.accounts.values());
     }
 
