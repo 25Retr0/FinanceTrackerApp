@@ -70,6 +70,11 @@ public class FinanceViewUIController {
         this.transactionTable.getItems().add(t);
     }
 
+    public void updateTotalBalanceLabel() {
+        String amount = String.format("%,.2f", this.ts.calculateTotalBalance());
+        balanceValueLabel.setText(amount);
+    }
+
     public void onClickAddTransaction() {
         // TODO: Create UI for Adding a Transaction
         
@@ -77,6 +82,7 @@ public class FinanceViewUIController {
         Account a = this.ts.getCurrentAccount();
         this.ts.addTransaction(a.getName(), t);
         addDataToTable(t);
+        updateTotalBalanceLabel();
         System.out.println("Adding Transaction");
     }
 
