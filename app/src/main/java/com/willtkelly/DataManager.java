@@ -195,7 +195,6 @@ public class DataManager {
             System.out.println("Transaction Successfully Added");
 
         } catch (SQLException e) {
-            
             System.err.println("Adding transaction to database failed.");
             e.printStackTrace();
             return false;
@@ -204,7 +203,26 @@ public class DataManager {
         return true;
     }
 
-    public static boolean updateTransaction(Transaction oldT, Transaction newT) {
+    public static boolean updateAccountBalance(Account account) {
+        String updateSql = """
+            UPDATE accounts
+            SET balance = ?
+            WHERE id = ?;
+        """;
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(updateSql)
+        ) {
+            pstmt.setDouble(1, account.getBalance());
+            pstmt.setInt(2, account.getId());
+
+            pstmt.executeUpdate();
+            System.out.println("Account balance successfully updated");
+        } catch (SQLException e) {
+            System.err.println("Updating account balance to database failed.");
+            e.printStackTrace();
+            return false;
+        }
 
         return true;
     }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.scene.chart.XYChart.Data;
+
 
 public class TransactionService {
 
@@ -125,6 +127,9 @@ public class TransactionService {
 
         // Save transaction to database
         DataManager.addTransaction(transaction, account);
+        
+        // Update account balance
+        DataManager.updateAccountBalance(account);
 
         return true;
     }
