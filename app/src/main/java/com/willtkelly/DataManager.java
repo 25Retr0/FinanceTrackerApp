@@ -24,20 +24,22 @@ public class DataManager {
     public static void initialiseDatabase() {
         String createAccountTable = """
         CREATE TABLE IF NOT EXISTS accounts (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id INT NOT NULL UNIQUE,
             balance DECIMAL,
-            name VARCHAR(50)
+            name VARCHAR(50),
+            PRIMARY KEY (id AUTOINCREMENT)
         );
         """;
 
         String createTransTable = """
         CREATE TABLE IF NOT EXISTS transactions (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id INT NOT NULL UNIQUE,
             amount DECIMAL,
             category VARCHAR(20),
             date DATE,
             description VARCHAR(255),
             account_id INT,
+            PRIMARY KEY (id AUTOINCREMENT),
             FOREIGN KEY(account_id) REFERENCES accounts(id)
         );
         """;
@@ -66,7 +68,17 @@ public class DataManager {
         }
     }
 
-    public static Account loadAccountWithTransactions(String accountName) {
+    public static int getTransactionPKSequence() {
+
+        return 0;
+    };
+
+    public static int getAccountPKSequence() {
+
+        return 0;
+    };
+
+    public static Account loadAccountWithTransactions(int accountId, String accountName) {
         String sql = """
             SELECT t.id, t.amount, t.category, t.date, t.description 
             FROM transactions t
@@ -74,7 +86,7 @@ public class DataManager {
             WHERE a.name = ?;
         """;
 
-        Account account = new Account(accountName);
+        Account account = new Account(accountId, accountName);
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -106,7 +118,8 @@ public class DataManager {
 
     public static ArrayList<Account> loadAllAccounts() {
 
-        String sqlQuery = "SELECT name FROM accounts;";
+        String sqlQuery = "SELECT id, name FROM accounts;";
+        ArrayList<Integer> accountIds = new ArrayList<>();
         ArrayList<String> accountNames = new ArrayList<>();
 
         try (Connection conn = connect();
@@ -115,6 +128,7 @@ public class DataManager {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
+                accountIds.add(rs.getInt("id"));
                 accountNames.add(rs.getString("name")); 
             }
 
@@ -127,11 +141,58 @@ public class DataManager {
         // Use accountNames and load accounts
         ArrayList<Account> accounts = new ArrayList<>();
 
-        for (String name : accountNames) {
-            Account account = loadAccountWithTransactions(name);
+        for (int i = 0; i < accountIds.size(); i++) {
+            int id = accountIds.get(i);
+            String name = accountNames.get(i);
+            Account account = loadAccountWithTransactions(id, name);
             accounts.add(account);
         }
 
         return accounts;
     }
+
+
+    public static boolean addTransaction(Transaction t, Account a) {
+        String query = """
+            INSERT INTO transactions (amount, category, date, description, account_id)
+            VALUES (?, ?, ?, ?, ?);
+        """;
+        System.out.println("Attempting to add Transaction to Database");
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query)
+        ) {
+
+            System.out.print("Adding Transaction: (");
+            System.out.print(t.getAmount() + " ");
+            System.out.print(t.getCategory() + " ");
+            System.out.print(t.getDate() + " ");
+            System.out.print(t.getDescription() + " ");
+            System.out.print(a.getId());
+            System.out.print(")\n");
+
+            pstmt.setDouble(1, t.getAmount());
+            pstmt.setString(2, t.getCategory().toString());
+            pstmt.setDate(3, java.sql.Date.valueOf(t.getDate()));
+            pstmt.setString(4, t.getDescription());
+            pstmt.setInt(5, a.getId());
+
+            pstmt.executeUpdate();
+            System.out.println("Transaction Successfully Added");
+
+        } catch (SQLException e) {
+            
+            System.err.println("Adding transaction to database failed.");
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean updateTransaction(Transaction oldT, Transaction newT) {
+
+        return true;
+    }
+
 }

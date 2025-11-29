@@ -8,6 +8,10 @@ import java.util.List;
 public class TransactionService {
 
     private HashMap<String, Account> accounts;
+    private Account currentAccount;
+    private int TPKSequence;
+    private int APKSequence;
+
 
     public TransactionService() {
         this.accounts = new HashMap<>();
@@ -26,6 +30,34 @@ public class TransactionService {
         for (Account account : accountsList) {
             addAccount(account);
         }
+
+        if (accountsList.size() > 0) {
+            currentAccount = accountsList.getFirst();
+        }
+    }
+
+    public int getTPKSequence() {
+        return this.TPKSequence;
+    }
+
+    public void setTPKSequence(int n) {
+        this.TPKSequence = n;
+    }
+
+    public int getAPKSequence() {
+        return this.APKSequence;
+    }
+
+    public void setPKSequence(int n) {
+        this.APKSequence = n;
+    }
+
+    public Account getCurrentAccount() {
+        return this.currentAccount;
+    }
+
+    public void setCurrentAccount(Account account) {
+        this.currentAccount = account;
     }
 
     /**
@@ -74,8 +106,6 @@ public class TransactionService {
         return new ArrayList<>(this.accounts.values());
     }
 
-    
-
     /**
      * Adds a new transaction to the specified account.
      *
@@ -90,6 +120,10 @@ public class TransactionService {
         }
 
         account.addTransaction(transaction);
+
+        // Save transaction to database
+        DataManager.addTransaction(transaction, account);
+
         return true;
     }
 

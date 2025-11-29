@@ -54,11 +54,6 @@
          <top>
           <MenuBar BorderPane.alignment="CENTER">
             <menus>
-              <Menu mnemonicParsing="false" text="Save">
-                <items>
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                </items>
-              </Menu>
                   <Menu mnemonicParsing="false" text="Logout">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Logout" />
@@ -85,7 +80,7 @@
                                  <children>
                                     <ButtonBar layoutX="-13.0" layoutY="6.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="174.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <buttons>
-                                        <Button fx:id="addAccountBtn" mnemonicParsing="false" text="Add Account" />
+                                        <Button fx:id="addAccountBtn" mnemonicParsing="false" onAction="#onClickAddAccount" text="Add Account" />
                                       </buttons>
                                     </ButtonBar>
                                  </children>
@@ -94,7 +89,7 @@
                                  <children>
                                     <ButtonBar layoutX="84.0" prefHeight="40.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <buttons>
-                                        <Button fx:id="addTransactionBtn" mnemonicParsing="false" text="Add Transaction" />
+                                        <Button fx:id="addTransactionBtn" mnemonicParsing="false" onAction="#onClickAddTransaction" text="Add Transaction" />
                                       </buttons>
                                     </ButtonBar>
                                  </children>

@@ -1,11 +1,14 @@
 package com.willtkelly;
 
+import java.beans.EventHandler;
 import java.time.LocalDate;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,7 +29,6 @@ public class FinanceViewUIController {
     @FXML private TableColumn<Transaction, LocalDate> dateColumn;
     @FXML private TableColumn<Transaction, String> descriptionColumn;
 
-
     public FinanceViewUIController(TransactionService ts) {
         this.ts = ts;
     }
@@ -42,15 +44,15 @@ public class FinanceViewUIController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
         // Load and Display Data 
-//        ArrayList<Account> accounts = DataManager.loadAllAccounts();
         List<Account> allAccs = ts.getAllAccounts();
-        System.out.println(allAccs);
+
         if (allAccs.size() == 0) {
             System.err.println("No Accounts Available...");
             return;
         }
 
         Account acc = allAccs.getFirst();
+        ts.setCurrentAccount(acc);
         List<Transaction> trans = acc.getTransactions();
 
         ObservableList<Transaction> shownTransactions = FXCollections.observableArrayList(trans);
@@ -61,6 +63,27 @@ public class FinanceViewUIController {
         balanceValueLabel.setText(String.format("$%,.2f", balance));
 
         System.out.println("Application ready.");
+    }
+
+    public void addDataToTable(Transaction t) {
+        // add any new data to the table view to be displayed
+        this.transactionTable.getItems().add(t);
+    }
+
+    public void onClickAddTransaction() {
+        // TODO: Create UI for Adding a Transaction
+        
+        Transaction t = new Transaction(20, Category.GROCERIES, "Weekly Groceries");
+        Account a = this.ts.getCurrentAccount();
+        this.ts.addTransaction(a.getName(), t);
+        addDataToTable(t);
+        System.out.println("Adding Transaction");
+    }
+
+    public void onClickAddAccount() {
+        // TODO: Create UI for Adding an Account
+        
+        System.out.println("Adding Account");
     }
 
 }
