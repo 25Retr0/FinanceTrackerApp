@@ -48,7 +48,7 @@ public class TransactionService {
         return this.APKSequence;
     }
 
-    public void setPKSequence(int n) {
+    public void setAPKSequence(int n) {
         this.APKSequence = n;
     }
 
@@ -118,6 +118,8 @@ public class TransactionService {
         if (account == null) {
             return false;
         }
+
+        transaction.setId(this.TPKSequence++);
 
         account.addTransaction(transaction);
 

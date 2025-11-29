@@ -68,14 +68,26 @@ public class DataManager {
         }
     }
 
-    public static int getTransactionPKSequence() {
+    public static int getPKSequence(String tableName) {
+        String query = """
+            SELECT seq FROM sqlite_sequence
+            WHERE name = ?;
+        """;
 
-        return 0;
-    };
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query)
+        ) {
+            pstmt.setString(1, tableName);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int sequence = rs.getInt("seq");
+            return sequence;
 
-    public static int getAccountPKSequence() {
-
-        return 0;
+        } catch (SQLException e) {
+            System.err.println("Query of sequence failed:");
+            System.err.println(e.getMessage());
+            return -1;
+        }
     };
 
     public static Account loadAccountWithTransactions(int accountId, String accountName) {
@@ -143,7 +155,9 @@ public class DataManager {
 
         for (int i = 0; i < accountIds.size(); i++) {
             int id = accountIds.get(i);
+            System.out.println(id);
             String name = accountNames.get(i);
+            System.out.println(name);
             Account account = loadAccountWithTransactions(id, name);
             accounts.add(account);
         }

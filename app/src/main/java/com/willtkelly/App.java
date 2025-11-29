@@ -17,9 +17,17 @@ public class App extends Application {
         // Setup Model/Service Envirnoment
         DataManager.initialiseDatabase();
         ArrayList<Account> accounts = DataManager.loadAllAccounts();
+
         TransactionService ts = new TransactionService(accounts);
-        int n = DataManager.getTransactionPKSequence();
-        ts.setPKSequence(n);
+
+        // Set sequence numbers for ids
+        int pkSequence = DataManager.getPKSequence("transactions");
+        if (pkSequence == -1) { return; }
+        ts.setTPKSequence(pkSequence + 1);  // +1 to use next available number
+
+        pkSequence = DataManager.getPKSequence("accounts");
+        if (pkSequence == -1) { return; }
+        ts.setAPKSequence(pkSequence + 1);  // +1 to use next available number
 
         // Setup FXML Loader and apply the factory
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view1.fxml"));
