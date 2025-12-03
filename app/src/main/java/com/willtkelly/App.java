@@ -53,7 +53,6 @@ public class App extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Finance Tracker");
             primaryStage.setResizable(false);
-
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

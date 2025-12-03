@@ -67,7 +67,7 @@ public class FinanceViewUIController {
 
     public void addDataToTable(Transaction t) {
         // add any new data to the table view to be displayed
-        this.transactionTable.getItems().add(t);
+        this.transactionTable.getItems().addFirst(t);
     }
 
     public void updateTotalBalanceLabel() {
@@ -76,14 +76,19 @@ public class FinanceViewUIController {
     }
 
     public void onClickAddTransaction() {
-        // TODO: Create UI for Adding a Transaction
-        
-        Transaction t = new Transaction(20, Category.GROCERIES, "Weekly Groceries");
+        ViewPopupAddUpdate viewPopup = new ViewPopupAddUpdate();
+        viewPopup.display();
+
+        Transaction t = viewPopup.getSubmittedData();
+
+        if (t == null) { return; }
+
         Account a = this.ts.getCurrentAccount();
         this.ts.addTransaction(a.getName(), t);
         addDataToTable(t);
         updateTotalBalanceLabel();
         System.out.println("Adding Transaction");
+        
     }
 
     public void onClickAddAccount() {
