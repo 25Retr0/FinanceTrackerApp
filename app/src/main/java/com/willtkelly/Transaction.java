@@ -34,8 +34,12 @@ public class Transaction {
     }
 
     public void setDate(String date) {
-        // HACK: Please replace this
+        // HACK: PLEASE CHANGE THIS
         this.date = LocalDate.now();
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Category getCategory() { return this.category; }

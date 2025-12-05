@@ -1,14 +1,12 @@
 package com.willtkelly;
 
-import java.beans.EventHandler;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class FinanceViewUIController {
 
     private final TransactionService ts;
+    private List<String> accountNames;
 
     // Balance Label FXML
     @FXML private Label balanceValueLabel;
@@ -31,6 +30,7 @@ public class FinanceViewUIController {
 
     public FinanceViewUIController(TransactionService ts) {
         this.ts = ts;
+        this.accountNames = new ArrayList<>();
     }
 
 
@@ -49,6 +49,10 @@ public class FinanceViewUIController {
         if (allAccs.size() == 0) {
             System.err.println("No Accounts Available...");
             return;
+        }
+
+        for (Account account : allAccs) {
+            this.accountNames.add(account.getName());
         }
 
         Account acc = allAccs.getFirst();
@@ -76,15 +80,17 @@ public class FinanceViewUIController {
     }
 
     public void onClickAddTransaction() {
-        ViewPopupAddUpdate viewPopup = new ViewPopupAddUpdate();
+        ViewPopupAddUpdate viewPopup = new ViewPopupAddUpdate(this.accountNames);
         viewPopup.display();
 
-        Transaction t = viewPopup.getSubmittedData();
-
+        Transaction t = viewPopup.getSubmittedTransaction();
         if (t == null) { return; }
 
-        Account a = this.ts.getCurrentAccount();
-        this.ts.addTransaction(a.getName(), t);
+        String accountName = viewPopup.getSubmittedAccountName();
+        Account acc = this.ts.getAccount(accountName);
+
+        //Account a = this.ts.getCurrentAccount();
+        this.ts.addTransaction(acc.getName(), t);
         addDataToTable(t);
         updateTotalBalanceLabel();
         System.out.println("Adding Transaction");

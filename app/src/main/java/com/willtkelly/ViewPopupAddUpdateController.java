@@ -1,5 +1,8 @@
 package com.willtkelly;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,7 +15,9 @@ public class ViewPopupAddUpdateController {
 
     private Stage parent;
     private Transaction transaction;
+    private String accountName;
     private boolean submit; 
+    private List<String> accountNames;
 
     @FXML private TextField accountTextField;
     @FXML private TextField amountTextField;
@@ -28,6 +33,10 @@ public class ViewPopupAddUpdateController {
         this.parent = stage;
     }
 
+    public void setAccountNames(List<String> accountNames) {
+        this.accountNames = accountNames;
+    }
+
     public void initCategoryBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
         for (Category category : Category.values()) {
@@ -41,25 +50,52 @@ public class ViewPopupAddUpdateController {
         return this.transaction;
     }
 
+    public String getAccountName() {
+        return this.accountName;
+    }
+
     public boolean didSubmit() {
         return this.submit;
     }
 
     public void onSave() {
         // Save the submitted data
-        String accountValue = accountTextField.getText();
-        String amountValue = amountTextField.getText();
+        String accountValue = accountTextField.getText().trim();
+        String amountValue = amountTextField.getText().trim();
         String categoryValue = categoryChoiceBox.getValue();
-        String descriptionValue = descriptionTextField.getText();
+        String descriptionValue = descriptionTextField.getText().trim();
+
+        System.out.println("Account: " + accountValue);
+        System.out.println("Amount: " + amountValue);
+        System.out.println("Category: " + categoryValue);
+        System.out.println("Description: " + descriptionValue);
 
         // Check submitted data for errors
         // Check account exists
+        if (!this.accountNames.contains(amountValue)) {
+            // Account does not exists error
+            System.err.println("Account does not exist.");
+        }
 
         // Check amount is a number
-
+        int amount;
+        try {
+            amount = Integer.parseInt(amountValue);
+        } catch (NumberFormatException e) {
+            System.err.println("Amount is not a number.");
+            return;
+        }
         
         // Make didSubmit true;
         this.submit = true;
+
+        // Add data to the transaction
+        this.transaction = new Transaction();
+        this.accountName = accountValue;
+        this.transaction.setAmount(amount);
+        this.transaction.setCategory(Category.valueOf(categoryValue));
+        this.transaction.setDescription(descriptionValue);
+        this.transaction.setDate(LocalDate.now());;
 
         this.parent.close();
     }

@@ -1,5 +1,7 @@
 package com.willtkelly;
 
+import java.util.List;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,6 +11,11 @@ import javafx.stage.Stage;
 public class ViewPopupAddUpdate { 
 
     private ViewPopupAddUpdateController controller;
+    private List<String> accountNames;
+
+    public ViewPopupAddUpdate(List<String> accountNames) {
+        this.accountNames = accountNames;
+    }
 
     public void display() {
         Stage popupStage = new Stage();
@@ -20,6 +27,7 @@ public class ViewPopupAddUpdate {
         
         this.controller = new ViewPopupAddUpdateController();
         this.controller.setStage(popupStage);
+        this.controller.setAccountNames(accountNames);
         loader.setController(controller);
 
         try {
@@ -33,11 +41,17 @@ public class ViewPopupAddUpdate {
 
     }
 
-    public Transaction getSubmittedData() {
+    public Transaction getSubmittedTransaction() {
         if (this.controller.didSubmit()) {
             return this.controller.getTransaction();
         }
+        return null;
+    }
 
+    public String getSubmittedAccountName() {
+        if (this.controller.didSubmit()) {
+            return this.controller.getAccountName();
+        }
         return null;
     }
 
