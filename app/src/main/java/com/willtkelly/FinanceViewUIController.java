@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,6 +28,10 @@ public class FinanceViewUIController {
     @FXML private TableColumn<Transaction, String> categoryColumn;
     @FXML private TableColumn<Transaction, LocalDate> dateColumn;
     @FXML private TableColumn<Transaction, String> descriptionColumn;
+
+    @FXML private Label currentAccountLabel;
+    @FXML private ListView<String> accountsList;  
+ 
 
     public FinanceViewUIController(TransactionService ts) {
         this.ts = ts;
@@ -53,10 +58,12 @@ public class FinanceViewUIController {
 
         for (Account account : allAccs) {
             this.accountNames.add(account.getName());
+            this.accountsList.getItems().add(account.getName());
         }
 
         Account acc = allAccs.getFirst();
         ts.setCurrentAccount(acc);
+        this.currentAccountLabel.setText("Account: " + acc.getName());
         List<Transaction> trans = acc.getTransactions();
 
         ObservableList<Transaction> shownTransactions = FXCollections.observableArrayList(trans);
@@ -65,6 +72,19 @@ public class FinanceViewUIController {
         // Display Total Balance
         double balance = ts.calculateTotalBalance();
         balanceValueLabel.setText(String.format("$%,.2f", balance));
+
+
+        // Add listener for Accounts List View
+        accountsList.getSelectionModel().selectFirst();
+        accountsList.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                System.out.println("Selected item: " + newValue);
+                // Set currentAccountLabel
+                this.currentAccountLabel.setText("Account: " + newValue); 
+                // Get the data associated with the label
+            }
+        });
 
         System.out.println("Application ready.");
     }

@@ -87,11 +87,12 @@
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ButtonBar layoutX="84.0" prefHeight="40.0" prefWidth="716.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <ButtonBar layoutX="291.0" prefHeight="40.0" prefWidth="360.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="291.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <buttons>
                                         <Button fx:id="addTransactionBtn" mnemonicParsing="false" onAction="#onClickAddTransaction" text="Add Transaction" />
                                       </buttons>
                                     </ButtonBar>
+                                    <Label fx:id="currentAccountLabel" layoutX="5.0" layoutY="-1.0" prefHeight="41.0" prefWidth="282.0" text="Label" />
                                  </children>
                               </AnchorPane>
                           </items>
@@ -113,7 +114,7 @@
                                              </children>
                                           </HBox>
                                           <Label prefHeight="18.0" prefWidth="239.0" text="Accounts" />
-                                          <ListView prefHeight="521.0" prefWidth="173.0" />
+                                          <ListView fx:id="accountsList" prefHeight="521.0" prefWidth="173.0" />
                                        </children>
                                     </VBox>
                                  </children>
