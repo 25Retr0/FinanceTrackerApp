@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,9 +25,12 @@ public class ViewPopupAddUpdateController {
     @FXML private ChoiceBox<String> categoryChoiceBox;
     @FXML private TextArea descriptionTextField;
 
+    @FXML private Label errorMsgLabel;
+
     @FXML
     public void initialize() {
         initCategoryBox();
+        errorMsgLabel.setVisible(false);
     }
 
     public void setStage(Stage stage) {
@@ -65,16 +69,19 @@ public class ViewPopupAddUpdateController {
         String categoryValue = categoryChoiceBox.getValue();
         String descriptionValue = descriptionTextField.getText().trim();
 
-        System.out.println("Account: " + accountValue);
-        System.out.println("Amount: " + amountValue);
-        System.out.println("Category: " + categoryValue);
-        System.out.println("Description: " + descriptionValue);
+        // System.out.println("Account: " + accountValue);
+        // System.out.println("Amount: " + amountValue);
+        // System.out.println("Category: " + categoryValue);
+        // System.out.println("Description: " + descriptionValue);
 
         // Check submitted data for errors
         // Check account exists
-        if (!this.accountNames.contains(amountValue)) {
+        if (!this.accountNames.contains(accountValue)) {
             // Account does not exists error
             System.err.println("Account does not exist.");
+            errorMsgLabel.setText("Account does not exist");
+            errorMsgLabel.setVisible(true);
+            return;
         }
 
         // Check amount is a number
@@ -83,6 +90,8 @@ public class ViewPopupAddUpdateController {
             amount = Integer.parseInt(amountValue);
         } catch (NumberFormatException e) {
             System.err.println("Amount is not a number.");
+            errorMsgLabel.setText("Amount is not a number");
+            errorMsgLabel.setVisible(true);
             return;
         }
         
