@@ -61,11 +61,13 @@ public class FinanceViewUIController {
             this.accountsList.getItems().add(account.getName());
         }
 
+        // TODO: Move to function
         Account acc = allAccs.getFirst();
         ts.setCurrentAccount(acc);
         this.currentAccountLabel.setText("Account: " + acc.getName());
-        List<Transaction> trans = acc.getTransactions();
 
+        // TODO: Move to function
+        List<Transaction> trans = acc.getTransactions();
         ObservableList<Transaction> shownTransactions = FXCollections.observableArrayList(trans);
         transactionTable.setItems(shownTransactions);
 
@@ -78,11 +80,14 @@ public class FinanceViewUIController {
         accountsList.getSelectionModel().selectFirst();
         accountsList.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
+            // TODO: Move to function
             if (newValue != null) {
                 System.out.println("Selected item: " + newValue);
-                // Set currentAccountLabel
                 this.currentAccountLabel.setText("Account: " + newValue); 
-                // Get the data associated with the label
+                ts.setCurrentAccount(ts.getAccount(newValue));
+                List<Transaction> t = ts.getCurrentAccount().getTransactions();
+                ObservableList<Transaction> tableData = FXCollections.observableArrayList(t);
+                transactionTable.setItems(tableData);
             }
         });
 
