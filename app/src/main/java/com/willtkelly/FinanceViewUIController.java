@@ -123,7 +123,18 @@ public class FinanceViewUIController {
     }
 
     public void onClickAddAccount() {
-        // TODO: Create UI for Adding an Account
+        ViewPopupAddAccount viewPopup = new ViewPopupAddAccount();
+        viewPopup.display();
+
+        Account acc = viewPopup.getSubmittedAccount();
+        if (acc == null) { return; }
+
+        this.ts.addAccount(acc);
+        
+        // Add to List view
+        accountsList.getItems().add(acc.getName());
+        
+        updateTotalBalanceLabel();
         
         System.out.println("Adding Account");
     }

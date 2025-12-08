@@ -95,17 +95,15 @@ public class ViewPopupAddUpdateController {
             return;
         }
         
-        // Make didSubmit true;
-        this.submit = true;
-
         // Add data to the transaction
         this.transaction = new Transaction();
         this.accountName = accountValue;
         this.transaction.setAmount(amount);
         this.transaction.setCategory(Category.valueOf(categoryValue));
         this.transaction.setDescription(descriptionValue);
-        this.transaction.setDate(LocalDate.now());;
+        this.transaction.setDate(LocalDate.now());
 
+        this.submit = true;
         this.parent.close();
     }
 
