@@ -203,6 +203,26 @@ public class DataManager {
         return true;
     }
 
+    public static boolean removeTransaction(Transaction t) {
+        String query = "DELETE FROM transactions WHERE id = ?;";
+
+        System.out.println("Attemtping to remove Transaction from Database");
+
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            System.out.print("Removing Transaction: (");
+            System.out.print(t.getId() + ")\n");
+            pstmt.setInt(1, t.getId());
+            pstmt.executeUpdate();
+            System.out.println("Transaction Successfully Removed");
+        } catch (SQLException e) {
+            System.err.println("Removing transaction from database failed.");
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
     public static boolean AddAccount(Account a) {
         String query = """
             INSERT INTO accounts (name, balance)

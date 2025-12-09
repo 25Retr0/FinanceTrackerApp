@@ -1,5 +1,6 @@
 package com.willtkelly;
 
+import java.awt.font.TransformAttribute;
 import java.util.ArrayList;
 
 public class Account {
@@ -69,6 +70,11 @@ public class Account {
     public void addTransaction(Transaction transaction) {
         transactions.addFirst(transaction);
         setBalance(balance + transaction.getAmount());
+    }
+
+    public void removeTransaction(Transaction transaction) {
+        transactions.remove(transaction);
+        setBalance(balance - transaction.getAmount());
     }
 
 }

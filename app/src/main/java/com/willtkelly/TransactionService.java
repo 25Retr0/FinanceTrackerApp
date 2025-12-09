@@ -140,6 +140,18 @@ public class TransactionService {
         return true;
     }
 
+    public boolean removeTransaction(Transaction transaction) {
+        Account account = this.currentAccount;
+        account.removeTransaction(transaction);
+
+        boolean removed = DataManager.removeTransaction(transaction);
+        if (!removed) { return false; }
+
+        DataManager.updateAccountBalance(account);
+
+        return true;
+    }
+
     /**
      * Get the total balance of a specific account.
      *

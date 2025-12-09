@@ -81,7 +81,6 @@ public class FinanceViewUIController {
         double balance = ts.calculateTotalBalance();
         balanceValueLabel.setText(String.format("$%,.2f", balance));
 
-
         // Add listener for Accounts List View
         accountsList.getSelectionModel().selectFirst();
         accountsList.getSelectionModel().selectedItemProperty().addListener(
@@ -123,6 +122,7 @@ public class FinanceViewUIController {
                 // TODO: Implement logic to delete transaction
                 
                 // Remove from ts
+                this.ts.removeTransaction(selectedTransaction);
                 // NOTE: When removing from ts add to remove from database
                 transactionTable.getItems().remove(selectedTransaction);
                 updateTotalBalanceLabel();
