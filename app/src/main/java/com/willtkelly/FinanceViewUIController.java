@@ -4,12 +4,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.glass.ui.Menu;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -32,6 +37,7 @@ public class FinanceViewUIController {
     @FXML private Label currentAccountLabel;
     @FXML private ListView<String> accountsList;  
  
+    private ContextMenu transactionRowMenu;
 
     public FinanceViewUIController(TransactionService ts) {
         this.ts = ts;
@@ -61,12 +67,12 @@ public class FinanceViewUIController {
             this.accountsList.getItems().add(account.getName());
         }
 
-        // TODO: Move to function
+        // NOTE: Move to function
         Account acc = allAccs.getFirst();
         ts.setCurrentAccount(acc);
         this.currentAccountLabel.setText("Account: " + acc.getName());
 
-        // TODO: Move to function
+        // NOTE: Move to function
         List<Transaction> trans = acc.getTransactions();
         ObservableList<Transaction> shownTransactions = FXCollections.observableArrayList(trans);
         transactionTable.setItems(shownTransactions);
@@ -80,7 +86,7 @@ public class FinanceViewUIController {
         accountsList.getSelectionModel().selectFirst();
         accountsList.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
-            // TODO: Move to function
+            // NOTE: Move to function
             if (newValue != null) {
                 System.out.println("Selected item: " + newValue);
                 this.currentAccountLabel.setText("Account: " + newValue); 
@@ -91,7 +97,57 @@ public class FinanceViewUIController {
             }
         });
 
+        // Add Context Menus to TableView
+        setupTransactionTableContextMenu();
+
         System.out.println("Application ready.");
+    }
+
+    private void setupTransactionTableContextMenu() {
+        transactionRowMenu = new ContextMenu();
+
+        MenuItem editItem = new MenuItem("Edit Transaction");
+        editItem.setOnAction(event -> {
+            Transaction selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
+            if (selectedTransaction != null) {
+                System.out.println("Editing transaction: " + selectedTransaction);
+                // TODO: Implement logic to open Edit/Update Popup
+            }
+        });
+
+        MenuItem deleteItem = new MenuItem("Delete Transaction");
+        deleteItem.setOnAction(event -> {
+            Transaction selectedTransaction = transactionTable.getSelectionModel().getSelectedItem();
+            if (selectedTransaction != null) {
+                System.out.println("Deleting transaction: " + selectedTransaction);
+                // TODO: Implement logic to delete transaction
+                
+                // Remove from ts
+                // NOTE: When removing from ts add to remove from database
+                transactionTable.getItems().remove(selectedTransaction);
+                updateTotalBalanceLabel();
+            }
+        });
+
+        transactionRowMenu.getItems().addAll(editItem, deleteItem);
+
+        transactionTable.setRowFactory(tv -> {
+            final TableRow<Transaction> row = new TableRow<>();
+
+            row.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    row.setContextMenu(null);
+                } else {
+                    row.setContextMenu(transactionRowMenu);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void setupAccountsListContextMenu() {
+        // TODO:
+        return;
     }
 
     public void addDataToTable(Transaction t) {
