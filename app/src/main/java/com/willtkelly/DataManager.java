@@ -90,7 +90,9 @@ public class DataManager {
         }
     };
 
-    public static Account loadAccountWithTransactions(int accountId, String accountName) {
+    public static Account loadAccountWithTransactions(
+        int accountId, String accountName, Double balance
+    ) {
         String sql = """
             SELECT t.id, t.amount, t.category, t.date, t.description 
             FROM transactions t
@@ -118,6 +120,10 @@ public class DataManager {
                 account.addTransaction(t);
             }
 
+            if (account.getTransactions().size() == 0) {
+                account.setBalance(balance);
+            }
+
         } catch (SQLException e) {
             System.err.println("Database query failed:");
             System.err.println(e.getMessage());
@@ -130,9 +136,10 @@ public class DataManager {
 
     public static ArrayList<Account> loadAllAccounts() {
 
-        String sqlQuery = "SELECT id, name FROM accounts;";
+        String sqlQuery = "SELECT id, name, balance FROM accounts;";
         ArrayList<Integer> accountIds = new ArrayList<>();
         ArrayList<String> accountNames = new ArrayList<>();
+        ArrayList<Double> accountBalances = new ArrayList<>();
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(sqlQuery)) {
@@ -142,6 +149,7 @@ public class DataManager {
             while (rs.next()) {
                 accountIds.add(rs.getInt("id"));
                 accountNames.add(rs.getString("name")); 
+                accountBalances.add(rs.getDouble("balance")); 
             }
 
         } catch (SQLException e) {
@@ -155,10 +163,9 @@ public class DataManager {
 
         for (int i = 0; i < accountIds.size(); i++) {
             int id = accountIds.get(i);
-            System.out.println(id);
             String name = accountNames.get(i);
-            System.out.println(name);
-            Account account = loadAccountWithTransactions(id, name);
+            Double balance = accountBalances.get(i);
+            Account account = loadAccountWithTransactions(id, name, balance);
             accounts.add(account);
         }
 
@@ -196,6 +203,32 @@ public class DataManager {
 
         } catch (SQLException e) {
             System.err.println("Adding transaction to database failed.");
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean AddAccount(Account a) {
+        String query = """
+            INSERT INTO accounts (name, balance)
+            VALUES (?, ?);
+        """;
+        System.out.println("Attempting to add Account to Database");
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query)
+        ) {
+            System.out.print("Adding Account: (");
+            System.out.print(a.getId() + " " + a.getName() + " " + a.getBalance() + "\n");
+            pstmt.setString(1, a.getName());
+            pstmt.setDouble(2, a.getBalance());
+
+            pstmt.executeUpdate();
+            System.out.println("Account Successfully Added");
+        } catch (SQLException e) {
+            System.err.println("Adding account to database failed.");
             e.printStackTrace();
             return false;
         }

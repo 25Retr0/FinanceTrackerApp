@@ -30,7 +30,7 @@ public class TransactionService {
         }
 
         for (Account account : accountsList) {
-            addAccount(account);
+            this.accounts.put(account.getName(), account);
         }
 
         if (accountsList.size() > 0) {
@@ -76,6 +76,11 @@ public class TransactionService {
             return false;
         }
 
+        // Attempt to add to database
+        account.setId(this.APKSequence++);
+        boolean added = DataManager.AddAccount(account);
+        if (!added) { return false; }
+
         this.accounts.put(account_name, account);
         return true;
     }
@@ -88,7 +93,7 @@ public class TransactionService {
      */
     public Account getAccount(String accountName) {
         if (!this.accounts.containsKey(accountName)) {
-            // Throw error message?
+            // TODO: Throw error message?
             return null;
         }
 
@@ -126,7 +131,8 @@ public class TransactionService {
         account.addTransaction(transaction);
 
         // Save transaction to database
-        DataManager.addTransaction(transaction, account);
+        boolean added = DataManager.addTransaction(transaction, account);
+        if (!added) { return false; }
         
         // Update account balance
         DataManager.updateAccountBalance(account);

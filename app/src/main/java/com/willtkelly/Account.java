@@ -46,7 +46,9 @@ public class Account {
         this.transactions = new ArrayList<>();
     }
 
-    public Account() { }
+    public Account() {
+        this.transactions = new ArrayList<>();
+    }
 
     public int getId() { return this.id; }
 
