@@ -90,9 +90,7 @@ public class DataManager {
         }
     };
 
-    public static Account loadAccountWithTransactions(
-        int accountId, String accountName, Double balance
-    ) {
+    public static Account loadAccountWithTransactions(int accountId, String accountName) {
         String sql = """
             SELECT t.id, t.amount, t.category, t.date, t.description 
             FROM transactions t
@@ -116,14 +114,8 @@ public class DataManager {
                 t.setCategory(Category.valueOf(rs.getString("category")));
                 t.setDescription(rs.getString("description"));
                 t.setDate(rs.getString("date"));
-
                 account.addTransaction(t);
             }
-
-            if (account.getTransactions().size() == 0) {
-                account.setBalance(balance);
-            }
-
         } catch (SQLException e) {
             System.err.println("Database query failed:");
             System.err.println(e.getMessage());
@@ -165,7 +157,8 @@ public class DataManager {
             int id = accountIds.get(i);
             String name = accountNames.get(i);
             Double balance = accountBalances.get(i);
-            Account account = loadAccountWithTransactions(id, name, balance);
+            Account account = loadAccountWithTransactions(id, name);
+            account.setBalance(balance);
             accounts.add(account);
         }
 
